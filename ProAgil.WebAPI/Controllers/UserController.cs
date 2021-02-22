@@ -34,7 +34,7 @@ namespace ProAgil.WebAPI.Controllers
     public UserController(IConfiguration config,
                           UserManager<User> userManager,
                           SignInManager<User> signInManager,
-                          IProAgilRepositorio _repo,
+                          IProAgilRepositorio repo,
                           IMapper mapper)
     {
       _signInManager = signInManager;
