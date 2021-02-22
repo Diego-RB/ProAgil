@@ -25,8 +25,9 @@ namespace ProAgil.WebAPI.Controllers
     private readonly IConfiguration _config;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-    private readonly IMapper _mapper;
     private readonly IProAgilRepositorio _repo;
+    private readonly IMapper _mapper;
+    
 
 
 
@@ -37,12 +38,12 @@ namespace ProAgil.WebAPI.Controllers
                           IProAgilRepositorio repo,
                           IMapper mapper)
     {
-      _signInManager = signInManager;
-      _mapper = mapper;
-      _config = config;
-      _userManager = userManager;
-      _repo = repo;
-     
+        _signInManager = signInManager;
+        _repo = repo;
+        _mapper = mapper;
+        _config = config;
+        _userManager = userManager;
+      
     }
 
     [HttpGet("GetUser")]
