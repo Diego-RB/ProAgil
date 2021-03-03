@@ -17,7 +17,7 @@ namespace ProAgil.Repositorio
          //Evento
          List<Evento> GetAllEventoAsyncByTema(string tema, bool IncludeUsers);
          List<Evento> GetAllEventoAsync(bool IncludeUsers);
-         Evento GetEventoAsyncById(int EventoId, bool IncludeUsers);
+         List<Evento> GetEventoAsyncById(int EventoId, bool IncludeUsers);
          
 
 

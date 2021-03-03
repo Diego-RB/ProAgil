@@ -69,13 +69,32 @@ namespace ProAgil.Repositorio
             }
         }
 
-        public Evento GetEventoAsyncById(int EventoId, bool IncludeUsers)
+        public List<Evento> GetEventoAsyncById(int EventoId, bool IncludeUsers)
         {
             using (SqlConnection connection = new SqlConnection(_conectionString))
             {
-                var eventoSelect = connection.Query<Evento>("SELECT A.Id,A.Local,A.DataEvento,A.Tema,A.QtdPessoas,A.ImagemURL,A.Telefone,A.Email,A.Descricao,B.Nome,B.Preco,B.DataFim,B.DataFim,C.Nome,C.URL FROM Eventos A left Join Lotes B On A.Id = B.EventoId left Join RedesSociais C On A.Id = C.EventoId where A.Id = @Id", new {Id = EventoId}).FirstOrDefault();
+                var eventoDicionario = new Dictionary<int, Evento>(); 
+                var eventoSelect = connection.Query<Evento, Lote, RedeSocial, Evento>("SELECT A.Id,A.Local,A.DataEvento,A.Tema,A.QtdPessoas,A.ImagemURL,A.Telefone,A.Email,A.Descricao,B.Nome,B.Preco,B.DataFim,B.DataFim,C.Nome,C.URL FROM Eventos A left Join Lotes B On A.Id = B.EventoId left Join RedesSociais C On A.Id = C.EventoId where A.Id = @Id",
+                    (eventoFunc, loteFunc, redeSocialFunc) =>
+                    {
+                        Evento eventoAtual;
+
+                        if(!eventoDicionario.TryGetValue(eventoFunc.Id, out eventoAtual))
+                        {
+                            eventoAtual = eventoFunc;
+                            eventoAtual.Lotes = new List<Lote>();
+                            eventoAtual.RedesSociais = new List<RedeSocial>();
+                            eventoDicionario.Add(eventoAtual.Id, eventoAtual);
+                        }
+
+                        eventoAtual.Lotes.Add(loteFunc);
+                        eventoAtual.RedesSociais.Add(redeSocialFunc);
+
+                        return eventoAtual;
+                    }, splitOn: "Id,Id"
+                );
                 
-                return eventoSelect;
+                return eventoSelect.Distinct().ToList();
             }
             
         }
