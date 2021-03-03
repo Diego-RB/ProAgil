@@ -33,7 +33,7 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var eventos = await _repo.GetAllEventoAsync(true);
+                var eventos = _repo.GetAllEventoAsync(true);
                 var results = _mapper.Map<IEnumerable<EventoDto>>(eventos);
                 return Ok(results);
             }
@@ -44,7 +44,41 @@ namespace ProAgil.WebAPI.Controllers
             }
         }
 
-         [HttpPost("upload")]
+         
+
+        // GET api/values/5
+        [HttpGet("{EventoId}")]
+        public async Task<ActionResult> Get(int EventoId)
+        {
+            try
+           {
+                var evento = _repo.GetEventoAsyncById(EventoId, true);
+                var results = _mapper.Map<EventoDto>(evento);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro no Banco de Dados {ex.Message}");
+            }
+
+        }
+
+        [HttpGet("getByTema/{tema}")]
+        public async Task<ActionResult> Get(string tema)
+        {
+            try
+            {
+                var eventos = _repo.GetAllEventoAsyncByTema(tema, true);
+                return Ok(eventos);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Erro ao filtrar os temas!");
+            }
+        }
+
+        [HttpPost("upload")]
         public async Task<ActionResult> upload()
         {
             try
@@ -70,38 +104,6 @@ namespace ProAgil.WebAPI.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro no Banco de Dados {ex.Message}");
             }
                 return BadRequest("Erro ao tentar realizar Upload");
-        }
-
-        // GET api/values/5
-        [HttpGet("{EventoId}")]
-        public async Task<ActionResult> Get(int EventoId)
-        {
-            try
-           {
-                var evento = await _repo.GetEventoAsyncById(EventoId, true);
-                var results = _mapper.Map<EventoDto>(evento);
-                return Ok(results);
-            }
-            catch (Exception ex)
-            {
-
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro no Banco de Dados {ex.Message}");
-            }
-
-        }
-
-        [HttpGet("getByTema/{tema}")]
-        public async Task<ActionResult> Get(string tema)
-        {
-            try
-            {
-                var eventos = await _repo.GetAllEventoAsyncByTema(tema, true);
-                return Ok(eventos);
-            }
-            catch (Exception)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Erro no Banco de Dados ");
-            }
         }
 
         [HttpPost]
@@ -131,7 +133,7 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var evento = await _repo.GetEventoAsyncById(EventoId, false);
+                var evento = _repo.GetEventoAsyncById(EventoId, false);
                 if (evento == null) return NotFound();
 
                 var idLotes = new List<int>();
@@ -173,7 +175,7 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var evento = await _repo.GetEventoAsyncById(EventoId, false);
+                var evento = _repo.GetEventoAsyncById(EventoId, false);
                 if (evento == null) return NotFound();
                 _repo.Delete(evento);
 
