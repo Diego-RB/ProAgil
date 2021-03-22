@@ -1,6 +1,6 @@
 export interface Lote {
     id: number;
-    nome: string;
+    tipo: string;
     preco: number;
     dataInicio?: Date;
     dataFim?: Date;

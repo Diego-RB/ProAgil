@@ -20,6 +20,7 @@ namespace ProAgil.WebAPI.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [AllowAnonymous]
   public class UserController : ControllerBase
   {
     private readonly IConfiguration _config;
@@ -52,7 +53,7 @@ namespace ProAgil.WebAPI.Controllers
         return Ok(new UserDto());
     }
 
-    [HttpGet("GetByU")]
+    
 
     [HttpPost("Register")]
     [AllowAnonymous]

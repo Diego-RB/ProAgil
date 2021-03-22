@@ -88,7 +88,7 @@ export class EventoEditComponent implements OnInit {
   criaLote(lote: any): FormGroup {
     return this.fb.group({
       id: [lote.id],
-      nome: [lote.nome, Validators.required],
+      tipo: [lote.tipo, Validators.required],
       preco: [lote.preco, Validators.required],
       dataInicio: [lote.dataInicio],
       dataFim: [lote.dataFim]

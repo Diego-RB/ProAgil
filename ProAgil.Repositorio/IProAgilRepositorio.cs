@@ -8,7 +8,8 @@ namespace ProAgil.Repositorio
     public interface IProAgilRepositorio
     {
         //Geral
-         void Add<T>(T entity) where T: class;
+        void Add<T>(T entity) where T : class;
+         //long Add<T>(T entity) where T: class;
          void Update<T>(T entity) where T: class;
          void Delete<T>(T entity) where T: class;
          void DeleteRange<T>(T[] entity) where T: class;
@@ -17,7 +18,8 @@ namespace ProAgil.Repositorio
          //Evento
          List<Evento> GetAllEventoAsyncByTema(string tema, bool IncludeUsers);
          List<Evento> GetAllEventoAsync(bool IncludeUsers);
-         List<Evento> GetEventoAsyncById(int EventoId, bool IncludeUsers);
+         //List<Evento> GetEventoAsyncById(int EventoId, bool IncludeUsers);
+         Task<Evento> GetEventoAsyncById(int EventoId, bool IncludeUsers);
          
 
 

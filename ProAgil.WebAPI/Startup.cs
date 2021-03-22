@@ -24,7 +24,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProAgil.Dominio.Identity;
 using ProAgil.Repositorio;
-
+using ProAgil.WebAPI.Helpers;
 
 namespace ProAgil.Web
 {
@@ -90,7 +90,7 @@ namespace ProAgil.Web
             Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddScoped<IProAgilRepositorio, ProAgilRepositorio>();
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
             services.AddCors();
 
             

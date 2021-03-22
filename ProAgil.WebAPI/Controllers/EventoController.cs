@@ -16,6 +16,7 @@ namespace ProAgil.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   
     public class EventoController : ControllerBase
     {
         private readonly IProAgilRepositorio _repo;
@@ -28,7 +29,6 @@ namespace ProAgil.WebAPI.Controllers
         }
 
         [HttpGet]
-
         public async Task<ActionResult> Get()
         {
             try
@@ -47,14 +47,15 @@ namespace ProAgil.WebAPI.Controllers
          
 
         // GET api/values/5
-        [HttpGet("{EventoId}")]
-        public async Task<ActionResult> Get(int EventoId)
+        [HttpGet]
+        [Route("{eventoId:int}", Name = "GetEventoId")]
+        public async Task<ActionResult> Get(int eventoId)
         {
             try
            {
-                var evento = _repo.GetEventoAsyncById(EventoId, true);
+                var evento = await _repo.GetEventoAsyncById(eventoId, true);
                 var results = _mapper.Map<EventoDto>(evento);
-                return Ok(results);
+                return Ok(evento);
             }
             catch (Exception ex)
             {
@@ -116,13 +117,18 @@ namespace ProAgil.WebAPI.Controllers
 
                 if (await _repo.SaveChangesAsync())
                 {
-                    return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(evento));
+                    //rota URL Link Created
+                    // Pesquisar Unit of work com transAction
+                    //return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(evento));
+                    //return Created(Url.Link("GetEventoId", new { id = evento.Id }), evento.Id);
+                    return Created($"/api/evento/{evento.Id}", evento.Id);
+
                 }
 
             }
             catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco de Dados {ex.Message}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao inserir informações no Banco de Dados\n{ex.Message}");
             }
 
             return BadRequest();
@@ -133,7 +139,7 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var evento = _repo.GetEventoAsyncById(EventoId, false);
+                var evento = await _repo.GetEventoAsyncById(EventoId, false);
                 if (evento == null) return NotFound();
 
                 var idLotes = new List<int>();
@@ -160,6 +166,7 @@ namespace ProAgil.WebAPI.Controllers
                 if (await _repo.SaveChangesAsync())
                 {
                     return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(evento));
+
                 }
             }
             catch (System.Exception ex)
